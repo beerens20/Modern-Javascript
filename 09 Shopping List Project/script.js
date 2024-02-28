@@ -15,6 +15,8 @@ const itemForm = document.getElementById('item-form');
 const itemInput = document.getElementById('item-input');
 // id ul for the list of items
 const itemList = document.getElementById('item-list');
+// id for the clear button
+const clearBtn = document.getElementById('clear');
 
 
 /* Create eventListener functions */
@@ -58,6 +60,26 @@ function createIcon(classes){
     return icon;
 };
 
+function removeItem(e){
+    // target the parent element of the x icon using class on the button
+    if (e.target.parentElement.classList.contains('remove-item')){
+        // target the x -> button -> li then remove it
+        e.target.parentElement.parentElement.remove();
+    }
+};
+
+function clearItems(){
+    while (itemList.firstChild){
+        itemList.removeChild(itemList.firstChild);
+    };
+};
+
 /* Create event listeners */
 // form submit button
 itemForm.addEventListener('submit', addItem);
+
+// delete item event listener (target UL for event delegation)
+itemList.addEventListener('click', removeItem);
+
+// clear all items
+clearBtn.addEventListener('click', clearItems);
