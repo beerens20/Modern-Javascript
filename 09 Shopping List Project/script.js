@@ -1,5 +1,3 @@
-//TODO Add items to list via form
-//TODO Remove items from list by clicking the "X" button
 //TODO Clear all items with "clear" button
 //TODO Filter the items by typing in the filter field
 //TODO Add localStorage to persist items
@@ -17,7 +15,8 @@ const itemInput = document.getElementById('item-input');
 const itemList = document.getElementById('item-list');
 // id for the clear button
 const clearBtn = document.getElementById('clear');
-
+// id for filter field
+const itemFilter = document.getElementById('filter');
 
 /* Create eventListener functions */
 function addItem(e){
@@ -41,7 +40,10 @@ function addItem(e){
     // call createButton function to create our button with the necessary classes
     const button = createButton('remove-item btn-link text-red');
     li.appendChild(button);
+
+    // Add li to the DOM
     itemList.appendChild(li);
+    checkUI();
     itemInput.value = '';
 }
 
@@ -63,8 +65,11 @@ function createIcon(classes){
 function removeItem(e){
     // target the parent element of the x icon using class on the button
     if (e.target.parentElement.classList.contains('remove-item')){
+        if (confirm('Are you sure?')){
         // target the x -> button -> li then remove it
         e.target.parentElement.parentElement.remove();
+        checkUI();
+        }
     }
 };
 
@@ -72,6 +77,21 @@ function clearItems(){
     while (itemList.firstChild){
         itemList.removeChild(itemList.firstChild);
     };
+    checkUI();
+};
+
+// Clear UI state (hide filter and clear button when list is empty)
+function checkUI(){
+    // captures all li's in itemList (creates node list (array))
+    const items = itemList.querySelectorAll('li');
+    if (items.length === 0){
+        // no items in list
+        clearBtn.style.display = 'none'; //hide clear button
+        itemFilter.style.display = 'none'; //hide filter input
+    } else {
+        clearBtn.style.display = 'block';
+        itemFilter.style.display = 'block';
+    }
 };
 
 /* Create event listeners */
@@ -83,3 +103,6 @@ itemList.addEventListener('click', removeItem);
 
 // clear all items
 clearBtn.addEventListener('click', clearItems);
+
+// check UI when page loads
+checkUI();
