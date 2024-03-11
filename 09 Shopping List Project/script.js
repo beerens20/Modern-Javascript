@@ -18,6 +18,39 @@ const clearBtn = document.getElementById('clear');
 // id for filter field
 const itemFilter = document.getElementById('filter');
 
+function createButton(classes){
+    const button = document.createElement('button');
+    button.className = classes;
+    // append icon
+    const icon = createIcon('fa-solid fa-xmark');
+    button.appendChild(icon);
+    return button;
+};
+
+function createIcon(classes){
+    const icon = document.createElement('i');
+    icon.className = classes;
+    return icon;
+};
+
+// Get items from storage
+function getItemsFromStorage(){
+    //Create a placeholder variable
+    let itemsFromStorage;
+
+    //Check to see if there are already items in localStorage
+    if (localStorage.getItem('items') === null){
+        //If localStorage is empty set itemsFromStorage to an empty array
+        itemsFromStorage = [];
+        return itemsFromStorage;
+    }else {
+        //If localStorage is NOT empty parse localStorage back into an array
+        //and put new item into the array
+        itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+        return itemsFromStorage;
+    };
+};
+
 /* Create eventListener functions */
 function onAddItemSubmit(e){
     // prevent form submission to submitting to a file
@@ -40,9 +73,7 @@ function onAddItemSubmit(e){
 
     checkUI();
     itemInput.value = '';
-}
-
-
+};
 
 function addItemtoDOM(item){
     // create list item
@@ -61,7 +92,7 @@ function addItemtoDOM(item){
 
 function addItemToStorage(item){
     //Create a placeholder variable
-    let itemsFromStorage;
+    let itemsFromStorage = getItemsFromStorage;
 
     //Check to see if there are already items in localStorage
     if (localStorage.getItem('items') === null){
@@ -72,25 +103,11 @@ function addItemToStorage(item){
         //and put new item into the array
         itemsFromStorage = JSON.parse(localStorage.getItem('items'));
     };
+    // Add new item to array
     itemsFromStorage.push(item);
 
     //Convert updated array to a JSON string and set it back to localStorage
     localStorage.setItem('items', JSON.stringify(itemsFromStorage));
-};
-
-function createButton(classes){
-    const button = document.createElement('button');
-    button.className = classes;
-    // append icon
-    const icon = createIcon('fa-solid fa-xmark');
-    button.appendChild(icon);
-    return button;
-};
-
-function createIcon(classes){
-    const icon = document.createElement('i');
-    icon.className = classes;
-    return icon;
 };
 
 function removeItem(e){
@@ -161,3 +178,6 @@ itemFilter.addEventListener('input', filterItems)
 
 // check UI when page loads
 checkUI();
+
+// Display items from localStorage upon page load
+document.addEventListener('DOMContentLoaded', displayItems);
