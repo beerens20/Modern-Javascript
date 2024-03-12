@@ -42,13 +42,12 @@ function getItemsFromStorage(){
     if (localStorage.getItem('items') === null){
         //If localStorage is empty set itemsFromStorage to an empty array
         itemsFromStorage = [];
-        return itemsFromStorage;
     }else {
         //If localStorage is NOT empty parse localStorage back into an array
         //and put new item into the array
-        itemsFromStorage = JSON.parse(localStorage.getItem('items'));
-        return itemsFromStorage;
-    };
+        itemsFromStorage = JSON.parse(localStorage.getItem('items'));   
+    }
+    return itemsFromStorage;
 };
 
 /* Create eventListener functions */
@@ -80,7 +79,6 @@ function addItemtoDOM(item){
     const li = document.createElement('li');
     // put value from newItem into the li element
     li.appendChild(document.createTextNode(item));
-    console.log(li);
 
     // call createButton function to create our button with the necessary classes
     const button = createButton('remove-item btn-link text-red');
@@ -92,17 +90,17 @@ function addItemtoDOM(item){
 
 function addItemToStorage(item){
     //Create a placeholder variable
-    let itemsFromStorage = getItemsFromStorage;
+    let itemsFromStorage = getItemsFromStorage();
 
-    //Check to see if there are already items in localStorage
-    if (localStorage.getItem('items') === null){
-        //If localStorage is empty set itemsFromStorage to an empty array
-        itemsFromStorage = [];
-    }else {
-        //If localStorage is NOT empty parse localStorage back into an array
-        //and put new item into the array
-        itemsFromStorage = JSON.parse(localStorage.getItem('items'));
-    };
+    // //Check to see if there are already items in localStorage
+    // if (localStorage.getItem('items') === null){
+    //     //If localStorage is empty set itemsFromStorage to an empty array
+    //     itemsFromStorage = [];
+    // }else {
+    //     //If localStorage is NOT empty parse localStorage back into an array
+    //     //and put new item into the array
+    //     itemsFromStorage = JSON.parse(localStorage.getItem('items'));
+    // };
     // Add new item to array
     itemsFromStorage.push(item);
 
