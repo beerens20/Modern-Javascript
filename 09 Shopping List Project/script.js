@@ -17,6 +17,8 @@ const itemList = document.getElementById('item-list');
 const clearBtn = document.getElementById('clear');
 // id for filter field
 const itemFilter = document.getElementById('filter');
+const formBtn = itemForm.querySelector('button');
+let isEditMode = false;
 
 function displayItems(){
     const itemsFromStorage = getItemsFromStorage();
@@ -53,6 +55,15 @@ function onAddItemSubmit(e){
         return;
     }
     
+    // Check for edit mode
+    if (isEditMode){
+        const itemToEdit = itemList.querySelector('.edit-mode');
+        removeItemFromStorage(itemToEdit.textContent);
+        itemToEdit.classList.remove('edit-mode');
+        itemToEdit.remove();
+        isEditMode = false;
+    };
+
     //Create item DOM element
     addItemtoDOM(newItem);
 
@@ -107,15 +118,27 @@ function getItemsFromStorage(){
     return itemsFromStorage;
 };
 
-// 2. Allows different actions depending on what part of the LI is clicked
+// Allows different actions depending on what part of the LI is clicked
 function onClickItem(e){
     // If the X is clicked on
     if (e.target.parentElement.classList.contains('remove-item')){
         removeItem(e.target.parentElement.parentElement);
+    } else {
+        setItemToEdit(e.target);
     }
 };
 
-// 3. Remove an item from the list
+function setItemToEdit(item){
+    isEditMode = true;
+    itemList.querySelectorAll('li').forEach(i => i.classList.remove('edit-mode'));
+
+    item.classList.add('edit-mode');
+    formBtn.innerHTML = '<i class="fa-solid fa-pen"</i> Update Item';
+    formBtn.style.backgroundColor = '#228b22';
+    itemInput.value = item.textContent;
+};
+
+// Remove an item from the list
 // the list item is passed in via the onClickItem function
 function removeItem(item){
     if (confirm('Are you sure?')){
@@ -128,7 +151,7 @@ function removeItem(item){
     };
 };
 
-// 4. Removes the item text from localStorage
+// Removes the item text from localStorage
 function removeItemFromStorage(item){
     // Grab the current items in storage
     let itemsFromStorage = getItemsFromStorage();
@@ -174,6 +197,7 @@ function filterItems(e){
 
 // Clear UI state (hide filter and clear button when list is empty)
 function checkUI(){
+    itemInput.value = '';
     // captures all li's in itemList (creates node list (array))
     const items = itemList.querySelectorAll('li');
     if (items.length === 0){
@@ -184,6 +208,9 @@ function checkUI(){
         clearBtn.style.display = 'block';
         itemFilter.style.display = 'block';
     }
+    formBtn.innerHTML = '<i class="fa-solid fa-plus"></i> Add Item';
+    formBtn.style.backgroundColor = '#333';
+    isEditMode = false;
 };
 
 /* Create event listeners */
